@@ -5,7 +5,11 @@
 F_YUM="yum install -y"
 F_DIR="/etc/vsftpd"
 F_DB="vsftpd_login"
-F_VIR=""
+F_VIR="$1"
+
+
+
+
 $F_YUM vsftpd*
 rpm -qa |grep vsftpd
 systemctl restart vsftpd.service
@@ -14,9 +18,10 @@ systemctl restart vsftpd.service
 $F_YUM  pam* libdb-utils libdb* --skip-broken
 
 touch $F_DIR/ftpusers.txt
-echo "jfedu001
+cat>>$F_DIR/ftpusers.txt<<EOF
+${F_VIR}
 123456
-">$F_DIR/ftpusers.txt
+EOF
 
 db_load -T -t hash -f $F_DIR/ftpusers.txt $F_DIR/${F_DB}.db
 
@@ -39,4 +44,27 @@ virtual_use_local_privs=YES
 mkdir -p /etc/${F_USR}/vsftpd_user_conf
 chown -R ftpuser:ftpuser /home/ftpuser
 systemctl stop firewalld.service
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
